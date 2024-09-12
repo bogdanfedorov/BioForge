@@ -1,6 +1,7 @@
-import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
+import CameraControls from '../components/CameraControls';
+import Plane from '../components/Plane';
 
 function App() {
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -12,7 +13,7 @@ function App() {
         canvasRef.current.style.height = `${window.innerHeight}px`;
       }
     };
-    handleResize();
+    handleResize(); // Set size initially
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
@@ -26,10 +27,13 @@ function App() {
       <Canvas>
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
-        <OrbitControls />
-        <mesh>
+
+        <CameraControls />
+        <Plane />
+
+        <mesh position={[0, 0.5, 0]}>
           <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color="lightblue" />
+          <meshStandardMaterial color="blue" />
         </mesh>
       </Canvas>
     </div>
