@@ -3,6 +3,7 @@ import { Suspense, useEffect, useRef } from 'react';
 import { UI } from '../components/UI';
 import { CameraControls } from '../components/CameraControls';
 import { Plane } from '../components/Plane';
+import { Base } from '../components/Base';
 
 function App() {
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -15,7 +16,7 @@ function App() {
         canvasRef.current.style.height = `${window.innerHeight}px`;
       }
     };
-    handleResize(); // Set size initially
+    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
@@ -34,10 +35,7 @@ function App() {
           <CameraControls ref={cameraControlsRef} />
           <Plane />
 
-          <mesh position={[0, 0.5, 0]}>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color="blue" />
-          </mesh>
+          <Base />
         </Canvas>
         <UI getPlayerPosition={() => cameraControlsRef.current} />
       </Suspense>
