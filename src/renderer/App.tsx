@@ -1,10 +1,12 @@
 import { Canvas } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
-import CameraControls from '../components/CameraControls';
-import Plane from '../components/Plane';
+import { Suspense, useEffect, useRef } from 'react';
+import { UI } from '../components/UI';
+import { CameraControls } from '../components/CameraControls';
+import { Plane } from '../components/Plane';
 
 function App() {
   const canvasRef = useRef<HTMLDivElement>(null);
+  const cameraControlsRef = useRef<any>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -24,18 +26,21 @@ function App() {
       ref={canvasRef}
       style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}
     >
-      <Canvas>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
+      <Suspense fallback={null}>
+        <Canvas>
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[5, 5, 5]} intensity={1} />
 
-        <CameraControls />
-        <Plane />
+          <CameraControls ref={cameraControlsRef} />
+          <Plane />
 
-        <mesh position={[0, 0.5, 0]}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color="blue" />
-        </mesh>
-      </Canvas>
+          <mesh position={[0, 0.5, 0]}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="blue" />
+          </mesh>
+        </Canvas>
+        <UI getPlayerPosition={() => cameraControlsRef.current} />
+      </Suspense>
     </div>
   );
 }

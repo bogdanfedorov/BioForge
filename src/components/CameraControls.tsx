@@ -1,10 +1,10 @@
-import { OrbitControls } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import { useEffect, useRef, useState } from 'react';
+// src/components/CameraControls.tsx
+import { useFrame, useThree } from '@react-three/fiber';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import * as THREE from 'three';
 
-export default function CameraControls() {
-  const controlsRef = useRef<any>(null);
+export const CameraControls = forwardRef((_, ref) => {
+  const { camera } = useThree();
   const [keys, setKeys] = useState({
     w: false,
     a: false,
@@ -38,23 +38,31 @@ export default function CameraControls() {
 
   // Update camera position based on keypress
   useFrame(() => {
-    if (!controlsRef.current) return;
+    const speed = 0.5;
+    const moveVector = new THREE.Vector3();
 
-    const speed = 0.1;
-    const direction = new THREE.Vector3();
+    if (keys.w) moveVector.z -= speed; // Move forward
+    if (keys.s) moveVector.z += speed; // Move backward
+    if (keys.a) moveVector.x -= speed; // Move left
+    if (keys.d) moveVector.x += speed; // Move right
 
-    if (keys.w)
-      controlsRef.current.object.position.add(new THREE.Vector3(0, 0, -speed));
-    if (keys.s)
-      controlsRef.current.object.position.add(new THREE.Vector3(0, 0, speed));
-    if (keys.a)
-      controlsRef.current.object.position.add(new THREE.Vector3(-speed, 0, 0));
-    if (keys.d)
-      controlsRef.current.object.position.add(new THREE.Vector3(speed, 0, 0));
-
-    // Lock camera tilt (rotationX)
-    controlsRef.current.object.rotation.x = -Math.PI / 6; // 30 degrees downwards
+    camera.position.add(moveVector); // Двигаем камеру напрямую
   });
 
-  return <OrbitControls ref={controlsRef} enablePan={false} enableZoom />;
-}
+  // Set initial camera position and rotation (fixed angle)
+  useEffect(() => {
+    camera.position.set(0, 50, 50); // Устанавливаем высоту и начальное положение камеры
+    camera.rotation.set(-Math.PI / 4, 0, 0); // Устанавливаем наклон камеры (фиксируем угол)
+  }, [camera]);
+
+  // Expose camera position to parent component
+  useImperativeHandle(ref, () => ({
+    getPlayerPosition: () => ({
+      x: camera.position.x,
+      y: camera.position.y,
+      z: camera.position.z,
+    }),
+  }));
+
+  return null; // Компонент не возвращает JSX
+});
