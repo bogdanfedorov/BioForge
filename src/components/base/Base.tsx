@@ -1,8 +1,7 @@
 import { FC } from 'react';
-
-import { entitySizes } from '../config';
-import { BaseEntityTypeProps } from './types';
-import { useGame } from '../context/Game.context';
+import { Sphere } from '@react-three/drei';
+import { useGame } from '../../context/Game.context';
+import { BaseEntityTypeProps } from '../types';
 
 export const Base: FC<BaseEntityTypeProps> = ({ entity }) => {
   const game = useGame();
@@ -14,15 +13,12 @@ export const Base: FC<BaseEntityTypeProps> = ({ entity }) => {
   };
 
   return (
-    <mesh
+    <Sphere
       name={entity.name}
       position={entity.position}
       onClick={onClickHandler}
-    >
-      <sphereGeometry
-        args={[entitySizes.base, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2]}
-      />
-      <meshStandardMaterial color="green" />
-    </mesh>
+      scale={0.5}
+      material-color="hotpink"
+    ></Sphere>
   );
 };

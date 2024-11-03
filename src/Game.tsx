@@ -10,11 +10,9 @@ import { FC } from 'react';
 import EntityRenderer from './components/EntityRenderer';
 import { Player } from './components/Player';
 import { UI } from './components/UI';
-import { CollisionProvider } from './context/Collision.context';
+import { GameProvider, useGame } from './context/Game.context';
 import { useResizeWindow } from './hooks/useResizeWindow';
 import { PlayerKeys } from './types';
-import { Base } from './components/Base';
-import { GameProvider } from './context/Game.context';
 
 const GameComponent: FC = () => {
   const canvasRef = useResizeWindow();
@@ -25,6 +23,13 @@ const GameComponent: FC = () => {
     { name: PlayerKeys.West, keys: ['ArrowLeft', 'a', 'A'] },
     { name: PlayerKeys.East, keys: ['ArrowRight', 'd', 'D'] },
   ];
+
+  const game = useGame();
+  const planeHandler = () => {
+    if (game) {
+      game.setSelectedEntity(null);
+    }
+  };
 
   return (
     <>
@@ -37,24 +42,11 @@ const GameComponent: FC = () => {
 
           <EntityRenderer />
 
-          <Box
-            args={[1, 1, 1]}
-            position={[0, 0, 0]}
-            name="base"
-            onClick={(test) => {
-              console.log('cliecked', test.eventObject.name);
-            }}
+          <Plane
+            args={[10, 10]}
+            material-color="green"
+            onClick={planeHandler}
           />
-
-          <Box
-            args={[1, 1, 1]}
-            scale={0.25}
-            position={[1, 0, 0]}
-            onClick={() => {
-              console.log('cliecked');
-            }}
-          />
-          <Plane args={[10, 10]} material-color="hotpink" />
           <Player />
         </Canvas>
       </KeyboardControls>
@@ -65,9 +57,7 @@ const GameComponent: FC = () => {
 const Game: FC = () => {
   return (
     <GameProvider>
-      <CollisionProvider>
-        <GameComponent />
-      </CollisionProvider>
+      <GameComponent />
     </GameProvider>
   );
 };

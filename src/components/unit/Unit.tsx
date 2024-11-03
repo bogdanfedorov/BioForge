@@ -1,14 +1,21 @@
 import React, { FC, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { entitySizes } from '../config';
-import { BaseEntityTypeProps } from './types';
+
+import { EntityType } from '../../types';
+import { BaseEntityTypeProps } from '../types';
+
+const entitySizes: Record<EntityType, number> = {
+  base: 5,
+  unit: 2,
+};
 
 export const Unit: FC<BaseEntityTypeProps> = ({ entity }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [targetPosition, setTargetPosition] = useState<THREE.Vector3 | null>(
     null,
   );
+
   const { camera, mouse, scene } = useThree();
   const unitRef = React.useRef<THREE.Mesh>(null!);
 
