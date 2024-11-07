@@ -4,6 +4,7 @@ import { useEntity } from '../../context/Entity.context';
 import { useGame } from '../../context/Game.context';
 import { Chloroformus } from './organs/Chloroformus';
 import { Color, Euler } from 'three';
+import { Tentacle } from './organs/Tentacle';
 
 export const BioPlant: FC = () => {
   const game = useGame();
@@ -31,6 +32,7 @@ export const BioPlant: FC = () => {
         <meshStandardMaterial color={stemColor} roughness={0.7} />
       </Cylinder>
 
+      <Tentacle />
       <Chloroformus />
     </group>
   );

@@ -1,10 +1,10 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Vector3 } from 'three';
 import { IBioPlant } from '../../types';
+import { PCF } from '../../utils/PCF.class';
 import { RangeLimiter } from '../../utils/RangeLimiter.class';
 import { BioPlant } from './BioPlant';
 import { BioPlantMenu } from './BioPlant.menu';
-import { PCF } from '../../utils/PCF.class';
 
 export class BioPlantEntiry implements IBioPlant {
   public static _id: number = 0;
